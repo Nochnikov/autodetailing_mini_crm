@@ -1,0 +1,31 @@
+version: '3.11'
+
+services:
+  autodet-postgres-db:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: autodet
+      POSTGRES_PASSWORD: autodet
+      POSTGRES_DB: autodet
+    volumes:
+      - autodet_postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - mysite/.env
+    depends_on:
+      - autodet-postgres-db
+
+volumes:
+    autodet_postgres_data:
+
+
+
