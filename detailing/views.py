@@ -1,7 +1,7 @@
-from datetime import timedelta
-from django.utils.timezone import now
 from django.views.generic import DetailView, ListView
 from detailing.models import Category
+from datetime import timedelta
+from django.utils.timezone import now
 
 
 # Create your views here.
@@ -25,21 +25,34 @@ class DashboardView(ListView):
 
     def get_queryset(self):
         period = self.request.GET.get('period', 'all')
-
         queryset = Category.objects.select_related('client', 'car', 'status').all()
 
+        today = now().date()
+
         if period == 'today':
-            return queryset.filter(created_at__date=now().date())
+            # Фильтрация по текущему дню
+            return queryset.filter(created_at__date=today)
+
         elif period == 'last_week':
-            start_date = now().date() - timedelta(days=7)
-            return queryset.filter(created_at__date__gte=start_date)
+            # Начало и конец прошлой недели
+            start_date = today - timedelta(days=today.weekday() + 7)  # Понедельник прошлой недели
+            end_date = today - timedelta(days=today.weekday() + 1)   # Воскресенье прошлой недели
+            return queryset.filter(created_at__date__gte=start_date, created_at__date__lte=end_date)
+
         elif period == 'last_month':
-            start_date = now().date() - timedelta(days=30)
-            return queryset.filter(created_at__date__gte=start_date)
+            # Определяем начало и конец прошлого месяца
+            first_day_of_this_month = today.replace(day=1)
+            last_day_of_last_month = first_day_of_this_month - timedelta(days=1)
+            start_date = last_day_of_last_month.replace(day=1)
+            return queryset.filter(created_at__date__gte=start_date, created_at__date__lte=last_day_of_last_month)
+
         elif period == 'last_year':
-            start_date = now().date() - timedelta(days=365)
-            return queryset.filter(created_at__date__gte=start_date)
+            start_date = today.replace(year=today.year - 1, month=1, day=1)
+            end_date = today.replace(year=today.year - 1, month=12, day=31)
+            return queryset.filter(created_at__date__gte=start_date, created_at__date__lte=end_date)
+
         return queryset
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -1,5 +1,8 @@
+
 from django.db import models
 import uuid
+
+from django.utils import timezone
 
 # Create your models here.
 
@@ -44,7 +47,7 @@ class Category(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, null=True)
 
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
 
     def __str__(self):

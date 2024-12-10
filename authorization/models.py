@@ -9,7 +9,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                       (FEMALE, 'female'))
 
     username = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     first_name = models.CharField(max_length=100)
@@ -20,11 +20,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
 
-    def save(self, *args, **kwargs):
-        if self.pk is not None:
-            self.set_password(self.password)
-        super(User, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.pk is not None:
+    #         self.set_password(self.password)
+    #     super(User, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return f'{self.username}:{self.password}, {self.is_superuser}'
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
