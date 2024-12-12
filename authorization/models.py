@@ -22,10 +22,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
-    # def save(self, *args, **kwargs):
-    #     if self.pk is not None:
-    #         self.set_password(self.password)
-    #     super(User, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if self.pk is None or not self.password.startswith('pbkdf2_'):
+            self.set_password(self.password)
+        super(User, self).save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.username}:{self.password}, {self.is_superuser}'

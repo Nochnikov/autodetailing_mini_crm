@@ -11,6 +11,9 @@ class Client(models.Model):
     last_name = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=20, unique=True)
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
 class Car(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -62,25 +65,27 @@ class Job(models.Model):
 
     def __str__(self):
         services = ", ".join([service.name for service in self.get_services()])
-        return f"Job {self.id} - Client: {self.client.first_name} {self.client.last_name}, Services: {services}"
+        return f"Job {self.id} - Services: {services}"
 
 
 
 class ServiceTransition(models.Model):
     job = models.ForeignKey('Job', on_delete=models.CASCADE, related_name='transitions')
     service = models.ForeignKey('Service', on_delete=models.CASCADE,  related_name='transitions')
-    status = models.ForeignKey('Status', on_delete=models.CASCADE, related_name='transitions')
+    status = models.ForeignKey('Status', on_delete=models.CASCADE, related_name='transitions', null=True, blank=True)
     photo = models.ImageField(upload_to='transitions_photos/', blank=True, null=True)
     changed_at = models.DateTimeField(default=timezone.now)
 
     def save(self, *args, **kwargs):
         if not self.service:
             self.service = self.job.service
+        if not self.status:  # Устанавливаем статус по умолчанию, если он не задан
+            self.status = Status.objects.filter(service=self.service).first()
         if self.pk:
             self.pk = None
         super().save(*args, **kwargs)
 
-
     def __str__(self):
-        return f'{self.service.name} - {self.status.name_of_the_status} ({self.changed_at})'
-
+        if self.status:
+            return f'{self.service.name} - {self.status.name_of_the_status} ({self.changed_at})'
+        return f'{self.service.name}'

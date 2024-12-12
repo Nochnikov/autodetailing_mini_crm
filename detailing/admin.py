@@ -7,13 +7,14 @@ from .forms import *
 class ServiceTransitionInline(admin.TabularInline):
     model = ServiceTransition
     fields = ('service', 'status', 'photo', 'changed_at')
+    form = ServiceTransitionForm
     readonly_fields = ('changed_at',)
     extra = 0
 
 class JobAdmin(admin.ModelAdmin):
     list_display = ('id', 'client', 'car', 'get_services_list', 'job_status', 'created_at')
     inlines = [ServiceTransitionInline]
-
+    # form = ServiceTransitionForm
     def get_services_list(self, obj):
         return ", ".join([service.name for service in obj.get_services()])
     get_services_list.short_description = "Services"

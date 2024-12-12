@@ -22,16 +22,31 @@ class UserServiceTrackerView(DetailView):
             'transitions__status'
         ).get(id=job_id)
 
+    def get_object(self, **kwargs):
+        # Получаем UUID задания из URL
+        job_id = self.kwargs.get('job_id')
+        return Job.objects.prefetch_related(
+            'car',
+            'transitions__service',
+            'transitions__status'
+        ).get(id=job_id)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         job = self.get_object()
 
+        # Формирование контекста
         context['car'] = job.car
         context['client'] = job.client
-        context['services'] = {transition.service for transition in job.transitions.all()}
+        context['services'] = [
+            {
+                'service': transition.service,
+                'price': transition.service.price
+            }
+            for transition in job.transitions.all()
+        ]
         context['transitions'] = job.transitions.all()
         context['photos'] = [transition.photo.url for transition in job.transitions.all() if transition.photo]
-
         return context
 
 

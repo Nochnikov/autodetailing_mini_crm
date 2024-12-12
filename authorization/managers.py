@@ -11,7 +11,8 @@ class UserManager(BaseUserManager):
             raise ValueError("The given username must be set")
 
         user = self.model(username=username, **extra_fields)
-        user.password = make_password(password)
+        # user.password = make_password(password)
+        user.password = password
         user.save(using=self._db)
         return user
 

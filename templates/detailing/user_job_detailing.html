@@ -93,11 +93,14 @@
         <div class="divider"></div>
 
         <!-- Services Information -->
-        <div class="section">
+       <div class="section">
             <div class="section-title">Selected Services</div>
             <div class="section-content">
-                {% for service in job.get_services %}
-                    - {{ service.name }}<br>
+                {% for transition in job.transitions.all %}
+                   {% if forloop.first %}
+                <strong>Service:</strong> {{ transition.service.name }}<br>
+                <strong>Price:</strong> ${{ transition.service.price }}<br>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
@@ -109,7 +112,9 @@
             <div class="section-title">Status History</div>
             <div class="section-content">
                 {% for transition in job.transitions.all %}
-                    <strong>Status:</strong> {{ transition.status.name_of_the_status }}<br>
+                    {% if transition.status %}
+                        <strong>Status:</strong> {{ transition.status.name_of_the_status }}<br>
+                    {% endif %}
                     <strong>Changed At:</strong> {{ transition.changed_at }}<br>
                     {% if transition.comment %}
                         <strong>Comment:</strong> {{ transition.comment }}<br>
@@ -126,7 +131,7 @@
                 {% for photo in job.transitions.all %}
                     {% if photo.photo %}
                         <div class="photo">
-                            <img src="{{ transition.photo.url }}" alt="Status Photo">
+                            <img src="{{ photo.photo.url }}" alt="Status Photo">
                         </div>
                     {% endif %}
                 {% endfor %}
