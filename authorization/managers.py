@@ -12,7 +12,7 @@ class UserManager(BaseUserManager):
 
         user = self.model(username=username, **extra_fields)
         user.password = make_password(password)
-        user.save()
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, username, password=None, **extra_fields):

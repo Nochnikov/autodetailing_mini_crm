@@ -1,61 +1,64 @@
+from django.db.models import Prefetch
 from django.views.generic import DetailView, ListView
-from detailing.models import Category
 from datetime import timedelta
 from django.utils.timezone import now
+from .models import Job, ServiceTransition
+from dateutil.relativedelta import relativedelta
+
 
 
 # Create your views here.
 class UserServiceTrackerView(DetailView):
-    model = Category
-    template_name = r'detailing/user_category_detailing.html'
-    # form_class = GetUserCategoryForm
-    context_object_name = 'field'
-
+    model = Job
+    template_name = r'detailing/user_job_detailing.html'
+    context_object_name = 'job'
 
     def get_object(self, **kwargs):
-        category_id = self.kwargs.get('category_id')
-        return Category.objects.get(id=category_id)
-
-
-
-class DashboardView(ListView):
-    model = Category
-    template_name = r'dashboard/dashboard.html'
-    context_object_name = 'categories'
-
-    def get_queryset(self):
-        period = self.request.GET.get('period', 'all')
-        queryset = Category.objects.select_related('client', 'car', 'status').all()
-
-        today = now().date()
-
-        if period == 'today':
-            # Фильтрация по текущему дню
-            return queryset.filter(created_at__date=today)
-
-        elif period == 'last_week':
-            # Начало и конец прошлой недели
-            start_date = today - timedelta(days=today.weekday() + 7)  # Понедельник прошлой недели
-            end_date = today - timedelta(days=today.weekday() + 1)   # Воскресенье прошлой недели
-            return queryset.filter(created_at__date__gte=start_date, created_at__date__lte=end_date)
-
-        elif period == 'last_month':
-            # Определяем начало и конец прошлого месяца
-            first_day_of_this_month = today.replace(day=1)
-            last_day_of_last_month = first_day_of_this_month - timedelta(days=1)
-            start_date = last_day_of_last_month.replace(day=1)
-            return queryset.filter(created_at__date__gte=start_date, created_at__date__lte=last_day_of_last_month)
-
-        elif period == 'last_year':
-            start_date = today.replace(year=today.year - 1, month=1, day=1)
-            end_date = today.replace(year=today.year - 1, month=12, day=31)
-            return queryset.filter(created_at__date__gte=start_date, created_at__date__lte=end_date)
-
-        return queryset
-
+        # Получаем UUID задания из URL
+        job_id = self.kwargs.get('job_id')
+        return Job.objects.prefetch_related(
+            'car',
+            'transitions__service',
+            'transitions__status'
+        ).get(id=job_id)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Dashboard'
+        job = self.get_object()
+
+        context['car'] = job.car
+        context['client'] = job.client
+        context['services'] = {transition.service for transition in job.transitions.all()}
+        context['transitions'] = job.transitions.all()
+        context['photos'] = [transition.photo.url for transition in job.transitions.all() if transition.photo]
+
         return context
 
+
+class DashboardView(ListView):
+    model = Job
+    template_name = r'dashboard/dashboard.html'
+    context_object_name = 'jobs'
+
+    def get_queryset(self):
+        period = self.request.GET.get('period', 'all')
+
+        queryset = Job.objects.select_related('client', 'car').prefetch_related(
+            Prefetch(
+                'transitions',  # Поле related_name в ServiceTransition
+                queryset=ServiceTransition.objects.select_related('service'),  # Предварительная загрузка service
+            )
+        )
+        # Фильтруем данные
+        if period == 'today':
+            return queryset.filter(created_at__date=now().date())
+        elif period == 'last_week':
+            start_date = now().date() - timedelta(days=7)
+            return queryset.filter(created_at__date__gte=start_date)
+        elif period == 'last_month':
+            start_date = now().date() - timedelta(days=30)
+            return queryset.filter(created_at__date__gte=start_date)
+        elif period == 'last_year':
+            start_date = now() - relativedelta(years=1)
+            return queryset.filter(created_at__date__gte=start_date)
+        return queryset

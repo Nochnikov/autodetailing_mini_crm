@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details</title>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .divider {
+            margin: 15px 0;
+            border-top: 1px solid #ddd;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #4e73df;
+        }
+
+        .section-content {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .photos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="title">Job Details</div>
+
+        <!-- Car Information -->
+        <div class="section">
+            <div class="section-title">Car Information</div>
+            <div class="section-content">
+                <strong>Car:</strong> {{ job.car }}<br>
+                <strong>Client:</strong> {{ job.client.first_name }} {{ job.client.last_name }}
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Services Information -->
+        <div class="section">
+            <div class="section-title">Selected Services</div>
+            <div class="section-content">
+                {% for service in job.get_services %}
+                    - {{ service.name }}<br>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Statuses and Transitions -->
+        <div class="section">
+            <div class="section-title">Status History</div>
+            <div class="section-content">
+                {% for transition in job.transitions.all %}
+                    <strong>Status:</strong> {{ transition.status.name_of_the_status }}<br>
+                    <strong>Changed At:</strong> {{ transition.changed_at }}<br>
+                    {% if transition.comment %}
+                        <strong>Comment:</strong> {{ transition.comment }}<br>
+                    {% endif %}
+                    <div class="divider"></div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Photos -->
+        <div class="section">
+            <div class="section-title">Photos</div>
+            <div class="photos">
+                {% for photo in job.transitions.all %}
+                    {% if photo.photo %}
+                        <div class="photo">
+                            <img src="{{ transition.photo.url }}" alt="Status Photo">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

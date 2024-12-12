@@ -19,6 +19,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
 
     # def save(self, *args, **kwargs):
     #     if self.pk is not None:
@@ -28,5 +30,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return f'{self.username}:{self.password}, {self.is_superuser}'
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = []
+

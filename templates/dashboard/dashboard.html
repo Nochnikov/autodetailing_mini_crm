@@ -18,71 +18,111 @@
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
 
     <style>
-     body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f9;
-    color: #333;
-}
+    body {
+        font-family: 'Nunito', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #eef2f7;
+        color: #333;
+    }
 
-.topbar {
-    background-color: #4e73df;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
+    .topbar {
+        background: linear-gradient(90deg, #4e73df, #1cc88a);
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        border-bottom: 5px solid #d1d3e2;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-size: 16px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
 
-.table th,
-.table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-}
+    .table th {
+        background-color: #4e73df;
+        color: white;
+        text-align: left;
+        padding: 12px;
+    }
 
-.table th {
-    background-color: #f4f4f9;
-    color: #333;
-    font-weight: bold;
-}
+    .table td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
 
-.table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
+    .table tr:nth-child(even) {
+        background-color: #f9fafc;
+    }
 
-.table tr:hover {
-    background-color: #f1f1f1;
-}
+    .table tr:hover {
+        background-color: #eef2f7;
+        transition: background-color 0.3s;
+    }
 
-.table td {
-    font-size: 14px;
-}
+    .table td {
+        font-size: 14px;
+    }
 
-.no-data {
-    text-align: center;
-    padding: 20px;
-    font-size: 16px;
-    color: #666;
-}
+    .no-data {
+        text-align: center;
+        padding: 20px;
+        font-size: 18px;
+        font-style: italic;
+        color: #888;
+    }
+
+    .filter-form {
+        margin-bottom: 20px;
+        text-align: right;
+    }
+
+    .filter-form label {
+        font-weight: bold;
+        margin-right: 10px;
+        color: #555;
+    }
+
+    .filter-form select {
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        background-color: #f8f9fc;
+    }
+
+    .card-header {
+        background: linear-gradient(90deg, #1cc88a, #4e73df);
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 18px;
+    }
+
+    .card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+    }
 
     </style>
 </head>
@@ -107,7 +147,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                         <form method="get" class="filter-form">
-                        <label for="period">Filter by time:</label>
+                            <label for="period">Filter by time:</label>
                             <select name="period" id="period" onchange="this.form.submit()">
                                 <option value="all" {% if request.GET.period == "all" %}selected{% endif %}>All time</option>
                                 <option value="today" {% if request.GET.period == "today" %}selected{% endif %}>Today</option>
@@ -115,11 +155,11 @@
                                 <option value="last_month" {% if request.GET.period == "last_month" %}selected{% endif %}>Last month</option>
                                 <option value="last_year" {% if request.GET.period == "last_year" %}selected{% endif %}>Last year</option>
                             </select>
-                            </form>
+                        </form>
                     <!-- Data Table -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Services Overview</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Jobs Overview</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -129,22 +169,26 @@
                                         <th>Car</th>
                                         <th>Client</th>
                                         <th>Service</th>
-                                        <th>Status</th>
-                                        <th>Price</th>
+                                        <th>Job Status</th>
+                                        <th>Created At</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for category in categories %}
+                                    {% for job in jobs %}
                                         <tr>
-                                            <td>{{ category.car }}</td>
-                                            <td>{{ category.client.first_name }} {{ category.client.last_name }}</td>
-                                            <td>{{ category.name_of_the_category }}</td>
-                                            <td>{{ category.status }}</td>
-                                            <td>{{ category.price }}</td>
+                                            <td>{{ job.car }}</td>
+                                            <td>{{ job.client.first_name }} {{ job.client.last_name }}</td>
+                                            <td>
+                                                {% for service in job.get_services %}
+                                                    {{ service.name }}{% if not forloop.last %}, {% endif %}
+                                                {% endfor %}
+                                            </td>
+                                            <td>{{ job.job_status }}</td>
+                                            <td>{{ job.created_at }}</td>
                                         </tr>
                                     {% empty %}
                                         <tr>
-                                            <td colspan="5" class="text-center">No data available</td>
+                                            <td colspan="5" class="text-center no-data">No data available</td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
