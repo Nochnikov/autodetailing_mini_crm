@@ -18,17 +18,9 @@ class UserServiceTrackerView(DetailView):
         job_id = self.kwargs.get('job_id')
         return Job.objects.prefetch_related(
             'car',
-            'transitions__service',
-            'transitions__status'
-        ).get(id=job_id)
-
-    def get_object(self, **kwargs):
-        # Получаем UUID задания из URL
-        job_id = self.kwargs.get('job_id')
-        return Job.objects.prefetch_related(
-            'car',
-            'transitions__service',
-            'transitions__status'
+            'service',
+            'transitions__status',
+          # Добавим связь с сервисом для получения информации о сервисе
         ).get(id=job_id)
 
     def get_context_data(self, **kwargs):
@@ -38,16 +30,12 @@ class UserServiceTrackerView(DetailView):
         # Формирование контекста
         context['car'] = job.car
         context['client'] = job.client
-        context['services'] = [
-            {
-                'service': transition.service,
-                'price': transition.service.price
-            }
-            for transition in job.transitions.all()
-        ]
+        context['service'] = job.service
+        context['price'] = job.service.price
         context['transitions'] = job.transitions.all()
         context['photos'] = [transition.photo.url for transition in job.transitions.all() if transition.photo]
         return context
+
 
 
 class DashboardView(ListView):
@@ -58,12 +46,7 @@ class DashboardView(ListView):
     def get_queryset(self):
         period = self.request.GET.get('period', 'all')
 
-        queryset = Job.objects.select_related('client', 'car').prefetch_related(
-            Prefetch(
-                'transitions',  # Поле related_name в ServiceTransition
-                queryset=ServiceTransition.objects.select_related('service'),  # Предварительная загрузка service
-            )
-        )
+        queryset = Job.objects.select_related('client', 'car', 'service')
         # Фильтруем данные
         if period == 'today':
             return queryset.filter(created_at__date=now().date())

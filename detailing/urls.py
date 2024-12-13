@@ -7,9 +7,3 @@ urlpatterns = [
         path('service/<uuid:job_id>/', views.UserServiceTrackerView.as_view(), name='index'),
         path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
 ]
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-

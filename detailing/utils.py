@@ -6,16 +6,22 @@ load_dotenv()
 
 INSTANCE_ID = getenv('INSTANCE_ID')
 API_TOKEN = getenv('API_TOKEN')
-BASE_URL = f'https://api.green-api.com/waInstance{INSTANCE_ID}'
+BASE_URL = f'https://api.green-api.com/waInstance{INSTANCE_ID}/SendMessage/{API_TOKEN}'
+
 
 def send_whatsapp_message(phone_number, message):
-    url = f'{BASE_URL}/SendMessage/{API_TOKEN}'
+    if "+" in phone_number:
+        phone_number = phone_number.replace('+', '')
+
     data = {
         "chatId": f"{phone_number}@c.us",
         "message": message
     }
-    response = requests.post(url, json=data)
+
+    response = requests.post(BASE_URL, json=data)
+
     if response.status_code == 200:
         print("Сообщение успешно отправлено")
     else:
         print(f"Ошибка отправки: {response.status_code}, {response.text}")
+

@@ -178,11 +178,7 @@
                                         <tr>
                                             <td>{{ job.car }}</td>
                                             <td>{{ job.client.first_name }} {{ job.client.last_name }}</td>
-                                            <td>
-                                                {% for service in job.get_services %}
-                                                    {{ service.name }}{% if not forloop.last %}, {% endif %}
-                                                {% endfor %}
-                                            </td>
+                                            <td>{{ job.service }}</td>
                                             <td>{{ job.job_status }}</td>
                                             <td>{{ job.created_at }}</td>
                                         </tr>

@@ -93,15 +93,11 @@
         <div class="divider"></div>
 
         <!-- Services Information -->
-       <div class="section">
+        <div class="section">
             <div class="section-title">Selected Services</div>
             <div class="section-content">
-                {% for transition in job.transitions.all %}
-                   {% if forloop.first %}
-                <strong>Service:</strong> {{ transition.service.name }}<br>
-                <strong>Price:</strong> ${{ transition.service.price }}<br>
-                    {% endif %}
-                {% endfor %}
+                        <strong>Service:</strong> {{ service.name }}<br>
+                        <strong>Price:</strong> ${{ service.price }}<br>
             </div>
         </div>
 

@@ -51,8 +51,9 @@ class Status(models.Model):
 
 class Job(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    client = models.ForeignKey('Client', on_delete=models.CASCADE)
+    car = models.ForeignKey('Car', on_delete=models.CASCADE)
+    service = models.ForeignKey('Service', on_delete=models.CASCADE, related_name='jobs')
     job_status = models.CharField(max_length=50, choices=[
         ('awaiting_payment', 'Awaiting Prepayment'),
         ('in_progress', 'In Progress'),
@@ -60,32 +61,47 @@ class Job(models.Model):
     ], default='awaiting_payment')
     created_at = models.DateTimeField(default=timezone.now)
 
-    def get_services(self):
-        return Service.objects.filter(transitions__job=self).distinct()
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None  # Проверяем, создаётся ли новый объект
+        super().save(*args, **kwargs)
+
+        if is_new:
+            # Пытаемся получить начальный статус
+            initial_status = Status.objects.filter(service=self.service).first()
+
+            if not initial_status:
+                raise ValueError(f"No initial status found for service '{self.service.name}'. Please create a status.")
 
     def __str__(self):
-        services = ", ".join([service.name for service in self.get_services()])
-        return f"Job {self.id} - Services: {services}"
-
+        return f"Job {self.id} - {self.service.name}"
 
 
 class ServiceTransition(models.Model):
     job = models.ForeignKey('Job', on_delete=models.CASCADE, related_name='transitions')
-    service = models.ForeignKey('Service', on_delete=models.CASCADE,  related_name='transitions')
-    status = models.ForeignKey('Status', on_delete=models.CASCADE, related_name='transitions', null=True, blank=True)
+    status = models.ForeignKey('Status', on_delete=models.CASCADE, related_name='transitions')
     photo = models.ImageField(upload_to='transitions_photos/', blank=True, null=True)
     changed_at = models.DateTimeField(default=timezone.now)
 
     def save(self, *args, **kwargs):
-        if not self.service:
-            self.service = self.job.service
-        if not self.status:  # Устанавливаем статус по умолчанию, если он не задан
-            self.status = Status.objects.filter(service=self.service).first()
+        # Проверяем, если это обновление (не создание новой записи)
         if self.pk:
-            self.pk = None
-        super().save(*args, **kwargs)
+            # Получаем старый статус из базы данных перед изменением
+            old_status = ServiceTransition.objects.get(id=self.pk).status
+            new_status = self.status
 
+            # Если статус изменился, создаем новый объект в ServiceTransition
+            if old_status != new_status:
+                # Создаем новый переход с новым статусом
+                new_transition = ServiceTransition(
+                    job=self.job,
+                    status=new_status,
+                    changed_at=timezone.now()  # Записываем текущую дату и время изменения
+                )
+                new_transition.save()  # Сохраняем новый переход
+                return  # Выходим из текущего сохранения
+
+        # Если статус не изменился, продолжаем стандартное сохранение
+        super(ServiceTransition, self).save(*args, **kwargs)
     def __str__(self):
-        if self.status:
-            return f'{self.service.name} - {self.status.name_of_the_status} ({self.changed_at})'
-        return f'{self.service.name}'
+        status_name = self.status.name_of_the_status if self.status else "No Status"
+        return f"{self.job} - {status_name} ({self.changed_at})"
