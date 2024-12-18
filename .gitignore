@@ -1,6 +1,4 @@
 .env
-venv/
-idea/
 **/migrations/*
 !**/migrations/
 !**/migrations/__init__.py

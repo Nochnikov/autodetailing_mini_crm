@@ -10,31 +10,36 @@
     <style>
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: #f4f4f9;
+            background-color: #212121; /* Темный фон */
             margin: 0;
             padding: 0;
+            color: #dfe6e9; /* Светлый текст */
         }
 
         .container {
             max-width: 800px;
             margin: 40px auto;
-            background-color: #ffffff;
+            background-color: #34495e; /* Темный фон контейнера */
             border-radius: 12px;
             padding: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
         }
 
         .title {
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 20px;
-            color: #333;
+            color: #ecf0f1; /* Светлый текст для заголовка */
             text-align: center;
+            background-color: #16a085; /* Яркий зеленый фон */
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 30px; /* Увеличиваем отступ снизу */
         }
 
         .divider {
             margin: 15px 0;
-            border-top: 1px solid #ddd;
+            border-top: 3px solid #1abc9c; /* Яркая линия между статусами */
         }
 
         .section {
@@ -42,15 +47,17 @@
         }
 
         .section-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
+            color: #1abc9c; /* Яркий зеленый цвет */
             margin-bottom: 10px;
-            color: #4e73df;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .section-content {
             font-size: 16px;
-            color: #555;
+            color: #ecf0f1;
             line-height: 1.5;
         }
 
@@ -74,6 +81,7 @@
             height: 100%;
             object-fit: cover;
         }
+
     </style>
 </head>
 
@@ -90,20 +98,16 @@
             </div>
         </div>
 
-        <div class="divider"></div>
-
-        <!-- Services Information -->
+        <!-- Selected Services -->
         <div class="section">
             <div class="section-title">Selected Services</div>
             <div class="section-content">
-                        <strong>Service:</strong> {{ service.name }}<br>
-                        <strong>Price:</strong> ${{ service.price }}<br>
+                <strong>Service:</strong> {{ service.name }}<br>
+                <strong>Price:</strong> ${{ service.price }}<br>
             </div>
         </div>
 
-        <div class="divider"></div>
-
-        <!-- Statuses and Transitions -->
+        <!-- Status History -->
         <div class="section">
             <div class="section-title">Status History</div>
             <div class="section-content">
@@ -137,3 +141,4 @@
 </body>
 
 </html>
+

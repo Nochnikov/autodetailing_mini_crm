@@ -1,14 +1,10 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
 
     <!-- Custom fonts and styles -->
@@ -18,112 +14,169 @@
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
 
     <style>
-    body {
-        font-family: 'Nunito', sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #eef2f7;
-        color: #333;
-    }
+        body {
+            font-family: 'Nunito', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #212121; /* Темный фон */
+            color: #dfe6e9; /* Светлый текст */
+        }
 
-    .topbar {
-        background: linear-gradient(90deg, #4e73df, #1cc88a);
-        color: white;
-        padding: 15px;
-        text-align: center;
-        font-size: 28px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        border-bottom: 5px solid #d1d3e2;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+        .topbar {
+            background: #285248; /* Яркий зеленый фон */
+            color: #ffffff;
+            padding: 15px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 0; /* Убираем отступ снизу */
+            border-radius: 12px 12px 0 0; /* Округляем верхний угол */
+        }
 
-    .container {
-        width: 90%;
-        max-width: 1200px;
-        margin: 20px auto;
-        background-color: #ffffff;
-        border-radius: 12px;
-        padding: 30px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #2c3e50; /* Темный контейнер */
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+        }
 
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        font-size: 16px;
-        border-radius: 10px;
-        overflow: hidden;
-    }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 16px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
 
-    .table th {
-        background-color: #4e73df;
-        color: white;
-        text-align: left;
-        padding: 12px;
-    }
+        .table th {
+            background-color: #34495e; /* Темный фон для заголовков */
+            color: #ffffff;
+            text-align: left;
+            padding: 15px;
+            border-bottom: 1px solid #2c3e50; /* Легкая граница */
+        }
 
-    .table td {
-        padding: 12px;
-        border-bottom: 1px solid #ddd;
-        text-align: left;
-    }
+        .table td {
+            padding: 15px;
+            border-bottom: 1px solid #444; /* Темная линия */
+            text-align: left;
+            font-size: 14px;
+        }
 
-    .table tr:nth-child(even) {
-        background-color: #f9fafc;
-    }
+        .table tr:nth-child(even) {
+            background-color: #3a4b56; /* Темный фон для четных строк */
+        }
 
-    .table tr:hover {
-        background-color: #eef2f7;
-        transition: background-color 0.3s;
-    }
+        .table tr:hover {
+            background-color: #4d6b7d; /* Светлее при наведении */
+            transition: background-color 0.3s ease-in-out;
+        }
 
-    .table td {
-        font-size: 14px;
-    }
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            font-style: italic;
+            color: #888;
+        }
 
-    .no-data {
-        text-align: center;
-        padding: 20px;
-        font-size: 18px;
-        font-style: italic;
-        color: #888;
-    }
+        .filter-form {
+            margin-bottom: 20px;
+            text-align: right;
+        }
 
-    .filter-form {
-        margin-bottom: 20px;
-        text-align: right;
-    }
+        .filter-form label {
+            font-weight: bold;
+            margin-right: 10px;
+            color: #ecf0f1;
+        }
 
-    .filter-form label {
-        font-weight: bold;
-        margin-right: 10px;
-        color: #555;
-    }
+        .filter-form select {
+            padding: 6px 12px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: #34495e;
+            color: #ffffff;
+        }
 
-    .filter-form select {
-        padding: 5px 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 14px;
-        background-color: #f8f9fc;
-    }
+        .card-header {
+            background: #1abc9c; /* Зеленый цвет для карточки */
+            color: #ffffff;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 18px;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
 
-    .card-header {
-        background: linear-gradient(90deg, #1cc88a, #4e73df);
-        color: white;
-        font-weight: bold;
-        text-transform: uppercase;
-        font-size: 18px;
-    }
+        .card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
 
-    .card {
-        border: none;
-        border-radius: 12px;
-        overflow: hidden;
-    }
+        .button {
+            display: inline-block;
+            background-color: #1abc9c; /* Зеленая кнопка */
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            text-align: center;
+        }
 
+        .button:hover {
+            background-color: #16a085; /* Темно-зеленый при наведении */
+        }
+
+        .divider {
+            margin: 20px 0;
+            border-top: 1px solid #444; /* Темная линия-разделитель */
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ecf0f1;
+            margin-bottom: 10px;
+        }
+
+        .section-content {
+            font-size: 16px;
+            color: #ecf0f1;
+            line-height: 1.6;
+        }
+
+        .photos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
 
@@ -146,16 +199,17 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                        <form method="get" class="filter-form">
-                            <label for="period">Filter by time:</label>
-                            <select name="period" id="period" onchange="this.form.submit()">
-                                <option value="all" {% if request.GET.period == "all" %}selected{% endif %}>All time</option>
-                                <option value="today" {% if request.GET.period == "today" %}selected{% endif %}>Today</option>
-                                <option value="last_week" {% if request.GET.period == "last_week" %}selected{% endif %}>Last week</option>
-                                <option value="last_month" {% if request.GET.period == "last_month" %}selected{% endif %}>Last month</option>
-                                <option value="last_year" {% if request.GET.period == "last_year" %}selected{% endif %}>Last year</option>
-                            </select>
-                        </form>
+                    <form method="get" class="filter-form">
+                        <label for="period">Filter by time:</label>
+                        <select name="period" id="period" onchange="this.form.submit()">
+                            <option value="all" {% if request.GET.period == "all" %}selected{% endif %}>All time</option>
+                            <option value="today" {% if request.GET.period == "today" %}selected{% endif %}>Today</option>
+                            <option value="last_week" {% if request.GET.period == "last_week" %}selected{% endif %}>Last week</option>
+                            <option value="last_month" {% if request.GET.period == "last_month" %}selected{% endif %}>Last month</option>
+                            <option value="last_year" {% if request.GET.period == "last_year" %}selected{% endif %}>Last year</option>
+                        </select>
+                    </form>
+
                     <!-- Data Table -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
