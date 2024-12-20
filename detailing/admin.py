@@ -36,3 +36,9 @@ admin.site.register(ServiceTransition)
 admin.site.register(Car)
 admin.site.register(Status)
 admin.site.register(Client)
+
+admin.site.site_header = 'Lucent Car'
+admin.site.site_title = 'Lucent Car Admin'
+admin.site.index_title = 'Welcome to Lucent Car Administration'
+
+

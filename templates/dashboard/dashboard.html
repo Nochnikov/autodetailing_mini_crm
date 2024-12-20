@@ -22,6 +22,20 @@
             color: #dfe6e9; /* Светлый текст */
         }
 
+        /* Линия и логотип сверху */
+        .logo-container {
+            background-color: #000000; /* Черный фон для новой линии */
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            width: 150px; /* Размер логотипа */
+            height: auto;
+            opacity: 1;
+        }
+
         .topbar {
             background: #285248; /* Яркий зеленый фон */
             color: #ffffff;
@@ -189,6 +203,11 @@
 
             <!-- Main Content -->
             <div id="content">
+
+                <!-- New top section with logo -->
+                <div class="logo-container">
+                    <img src="{% static 'logos/Frame 8.png' %}" alt="Lucent Car Logo" class="logo">
+                </div>
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow">
