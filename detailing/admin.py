@@ -1,7 +1,7 @@
 from detailing.models import *
 # Register your models here.
 from django.contrib import admin
-from .models import Job, ServiceTransition, Status
+from .models import Job, ServiceTransition, Status, Service
 
 
 class ServiceTransitionInline(admin.TabularInline):
@@ -36,6 +36,7 @@ admin.site.register(ServiceTransition)
 admin.site.register(Car)
 admin.site.register(Status)
 admin.site.register(Client)
+admin.site.register(Service)
 
 admin.site.site_header = 'Lucent Car'
 admin.site.site_title = 'Lucent Car Admin'
