@@ -16,6 +16,20 @@
             color: #dfe6e9; /* Светлый текст */
         }
 
+        /* Контейнер для логотипа */
+        .logo-container {
+            background-color: #000000; /* Темный фон элемента */
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        /* Логотип */
+        .logo {
+            width: 200px; /* Размер логотипа */
+            height: auto;
+            opacity: 1;
+        }
+
         .container {
             max-width: 800px;
             margin: 40px auto;
@@ -26,21 +40,10 @@
             position: relative;
         }
 
-        /* Логотип сбоку */
-        .logo {
-            position: absolute;
-            top: -100px;
-            left: -500px; /* Сдвигаем логотип чуть дальше от контейнера */
-            width: 400px; /* Размер логотипа */
-            height: auto;
-            opacity: 0.9;
-            z-index: -1; /* Логотип будет за контейнером */
-        }
-
         .title {
             font-size: 28px;
             font-weight: bold;
-            margin-top: 50px; /* Отступ сверху, чтобы не перекрывать с логотипом */
+            margin-top: 50px; /* Отступ сверху */
             color: #ecf0f1; /* Светлый текст для заголовка */
             text-align: center;
             background-color: #16a085; /* Яркий зеленый фон */
@@ -94,14 +97,46 @@
             object-fit: cover;
         }
 
+        /* Адаптивность для мобильных устройств (меньше 768px) */
+        @media (max-width: 768px) {
+            .logo {
+                width: 150px; /* Уменьшаем размер логотипа для мобильных */
+            }
+
+            .title {
+                font-size: 24px; /* Уменьшаем размер заголовка на мобильных */
+            }
+
+            .container {
+                padding: 20px; /* Уменьшаем отступы в контейнере для мобильных */
+            }
+        }
+
+        /* Адаптивность для экранов меньшего размера (например, мобильные телефоны в портретной ориентации) */
+        @media (max-width: 480px) {
+            .logo {
+                width: 120px; /* Еще меньше для маленьких экранов */
+            }
+
+            .title {
+                font-size: 20px; /* Еще меньший размер заголовка */
+            }
+
+            .container {
+                padding: 15px; /* Уменьшаем отступы еще больше */
+            }
+        }
+
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <!-- Логотип сбоку -->
+    <div class="logo-container">
+        <!-- Логотип будет теперь в верхней части страницы -->
         <img src="{% static 'logos/Frame 9.png' %}" alt="Lucent Car Logo" class="logo">
+    </div>
 
+    <div class="container">
         <div class="title">Job Details</div>
 
         <!-- Car Information -->
