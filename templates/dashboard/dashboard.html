@@ -98,7 +98,9 @@
 
         .filter-form {
             margin-bottom: 20px;
-            text-align: right;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .filter-form label {
@@ -113,6 +115,18 @@
             font-size: 14px;
             background-color: #34495e;
             color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .filter-form {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filter-form label,
+            .filter-form select {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -206,4 +220,3 @@
 </body>
 
 </html>
-
