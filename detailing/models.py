@@ -14,6 +14,9 @@ class Client(models.Model):
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
+    class Meta:
+        verbose_name_plural = 'Клиенты'
+
 class Car(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -27,6 +30,9 @@ class Car(models.Model):
     def __str__(self):
         return f'{self.car_number}, {self.car_mark}: {self.car_model} .'
 
+    class Meta:
+        verbose_name_plural = 'Машины'
+
 class Service(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
@@ -34,6 +40,9 @@ class Service(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    class Meta:
+        verbose_name_plural = 'Усгули'
 
 class Status(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -46,7 +55,7 @@ class Status(models.Model):
         return f'{self.name_of_the_status}'
 
     class Meta:
-        verbose_name_plural = 'Statuses'
+        verbose_name_plural = 'Статусы'
 
 
 class Job(models.Model):
@@ -55,18 +64,17 @@ class Job(models.Model):
     car = models.ForeignKey('Car', on_delete=models.CASCADE)
     service = models.ForeignKey('Service', on_delete=models.CASCADE, related_name='jobs')
     job_status = models.CharField(max_length=50, choices=[
-        ('awaiting_payment', 'Awaiting Prepayment'),
-        ('in_progress', 'In Progress'),
-        ('completed', 'Completed')
-    ], default='awaiting_payment')
+        ('ожидает_предоплаты', 'Ожидает Предоплаты'),
+        ('в_процессе', 'В Процессе'),
+        ('завершено', 'Завершено')
+    ], default='ожидает_предоплаты')
     created_at = models.DateTimeField(default=timezone.now)
 
     def save(self, *args, **kwargs):
-        is_new = self.pk is None  # Проверяем, создаётся ли новый объект
+        is_new = self.pk is None
         super().save(*args, **kwargs)
 
         if is_new:
-            # Пытаемся получить начальный статус
             initial_status = Status.objects.filter(service=self.service).first()
 
             if not initial_status:
@@ -74,6 +82,9 @@ class Job(models.Model):
 
     def __str__(self):
         return f"Job {self.id} - {self.service.name}"
+
+    class Meta:
+        verbose_name_plural = 'Работы'
 
 
 class ServiceTransition(models.Model):
@@ -105,3 +116,6 @@ class ServiceTransition(models.Model):
     def __str__(self):
         status_name = self.status.name_of_the_status if self.status else "No Status"
         return f"{self.job} - {status_name} ({self.changed_at})"
+
+    class Meta:
+        verbose_name_plural = 'Трек предоставленных работ'

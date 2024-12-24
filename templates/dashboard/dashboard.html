@@ -9,8 +9,7 @@
 
     <!-- Custom fonts and styles -->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
 
     <style>
@@ -18,84 +17,83 @@
             font-family: 'Nunito', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #212121; /* Темный фон */
-            color: #dfe6e9; /* Светлый текст */
+            background-color: #212121;
+            color: #dfe6e9;
         }
 
-        /* Линия и логотип сверху */
         .logo-container {
-            background-color: #000000; /* Черный фон для новой линии */
-            padding: 10px 0;
-            text-align: center;
-            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #000000;
+            padding: 10px 20px;
         }
 
         .logo {
-            width: 150px; /* Размер логотипа */
+            width: 200px;
             height: auto;
-            opacity: 1;
         }
 
-        .topbar {
-            background: #285248; /* Яркий зеленый фон */
-            color: #ffffff;
-            padding: 15px;
+        .topbar-title {
+            flex-grow: 1;
             text-align: center;
+            color: #ffffff;
             font-size: 28px;
             font-weight: bold;
-            margin-bottom: 0; /* Убираем отступ снизу */
-            border-radius: 12px 12px 0 0; /* Округляем верхний угол */
+            margin: 0;
         }
 
         .container {
             width: 90%;
             max-width: 1200px;
             margin: 20px auto;
-            background-color: #2c3e50; /* Темный контейнер */
-            border-radius: 12px;
-            padding: 30px;
+            background-color: #2c3e50;
+            padding: 20px;
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
         }
 
         .table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px;
             font-size: 16px;
-            border-radius: 10px;
-            overflow: hidden;
         }
 
         .table th {
-            background-color: #34495e; /* Темный фон для заголовков */
+            background-color: #34495e;
             color: #ffffff;
             text-align: left;
             padding: 15px;
-            border-bottom: 1px solid #2c3e50; /* Легкая граница */
+            border-bottom: 1px solid #2c3e50;
         }
 
         .table td {
             padding: 15px;
-            border-bottom: 1px solid #444; /* Темная линия */
+            border-bottom: 1px solid #444;
             text-align: left;
             font-size: 14px;
         }
 
         .table tr:nth-child(even) {
-            background-color: #3a4b56; /* Темный фон для четных строк */
+            background-color: #3a4b56;
         }
 
         .table tr:hover {
-            background-color: #4d6b7d; /* Светлее при наведении */
+            background-color: #4d6b7d;
             transition: background-color 0.3s ease-in-out;
         }
 
-        .no-data {
-            text-align: center;
-            padding: 20px;
+        .table-caption {
+            background-color: #1abc9c;
+            color: #ffffff;
+            font-weight: bold;
+            text-align: left;
+            padding: 15px;
             font-size: 18px;
-            font-style: italic;
-            color: #888;
         }
 
         .filter-form {
@@ -112,109 +110,25 @@
         .filter-form select {
             padding: 6px 12px;
             border: 1px solid #555;
-            border-radius: 5px;
             font-size: 14px;
             background-color: #34495e;
             color: #ffffff;
-        }
-
-        .card-header {
-            background: #1abc9c; /* Зеленый цвет для карточки */
-            color: #ffffff;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 18px;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            border: none;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .button {
-            display: inline-block;
-            background-color: #1abc9c; /* Зеленая кнопка */
-            color: white;
-            padding: 12px 24px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .button:hover {
-            background-color: #16a085; /* Темно-зеленый при наведении */
-        }
-
-        .divider {
-            margin: 20px 0;
-            border-top: 1px solid #444; /* Темная линия-разделитель */
-        }
-
-        .section-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #ecf0f1;
-            margin-bottom: 10px;
-        }
-
-        .section-content {
-            font-size: 16px;
-            color: #ecf0f1;
-            line-height: 1.6;
-        }
-
-        .photos {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .photo {
-            width: 150px;
-            height: 150px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
     </style>
 </head>
 
 <body id="page-top">
-    <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
-            <!-- Main Content -->
             <div id="content">
 
-                <!-- New top section with logo -->
+                <!-- Updated top section with larger logo and centered title -->
                 <div class="logo-container">
                     <img src="{% static 'logos/Frame 9.png' %}" alt="Lucent Car Logo" class="logo">
+                    <h1 class="topbar-title">Dashboard</h1>
                 </div>
-
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow">
-                    <div class="topbar">
-                        Dashboard
-                    </div>
-                </nav>
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -227,42 +141,48 @@
                             <option value="last_month" {% if request.GET.period == "last_month" %}selected{% endif %}>Last month</option>
                             <option value="last_year" {% if request.GET.period == "last_year" %}selected{% endif %}>Last year</option>
                         </select>
+
+                        <label for="job_status">Filter by job status:</label>
+                        <select name="job_status" id="job_status" onchange="this.form.submit()">
+                            <option value="all" {% if request.GET.job_status == "all" %}selected{% endif %}>All statuses</option>
+                            <option value="ожидает_предоплаты" {% if request.GET.job_status == "ожидает_предоплаты" %}selected{% endif %}>Ожидает Предоплаты</option>
+                            <option value="в_процессе" {% if request.GET.job_status == "в_процессе" %}selected{% endif %}>В Процессе</option>
+                            <option value="завершено" {% if request.GET.job_status == "завершено" %}selected{% endif %}>Завершено</option>
+                        </select>
                     </form>
 
                     <!-- Data Table -->
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Jobs Overview</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" width="100%" cellspacing="0">
-                                    <thead>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <caption class="table-caption">Jobs Overview</caption>
+                                <thead>
+                                <tr>
+                                    <th>Car</th>
+                                    <th>Client</th>
+                                    <th>Service</th>
+                                    <th>Job Status</th>
+                                    <th>Created At</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for job in jobs %}
+                                    {% if request.GET.job_status == "all" or job.job_status == request.GET.job_status %}
                                     <tr>
-                                        <th>Car</th>
-                                        <th>Client</th>
-                                        <th>Service</th>
-                                        <th>Job Status</th>
-                                        <th>Created At</th>
+                                        <td>{{ job.car }}</td>
+                                        <td>{{ job.client.first_name }} {{ job.client.last_name }}</td>
+                                        <td>{{ job.service }}</td>
+                                        <td>{{ job.job_status }}</td>
+                                        <td>{{ job.created_at }}</td>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for job in jobs %}
-                                        <tr>
-                                            <td>{{ job.car }}</td>
-                                            <td>{{ job.client.first_name }} {{ job.client.last_name }}</td>
-                                            <td>{{ job.service }}</td>
-                                            <td>{{ job.job_status }}</td>
-                                            <td>{{ job.created_at }}</td>
-                                        </tr>
-                                    {% empty %}
-                                        <tr>
-                                            <td colspan="5" class="text-center no-data">No data available</td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+                                    {% endif %}
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center no-data">No data available</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
@@ -286,3 +206,4 @@
 </body>
 
 </html>
+
