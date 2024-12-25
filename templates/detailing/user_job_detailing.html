@@ -10,51 +10,48 @@
     <style>
         body {
             font-family: 'Nunito', sans-serif;
-            background-color: #000000; /* Темный фон */
+            background-color: #000000;
             margin: 0;
             padding: 0;
-            color: #dfe6e9; /* Светлый текст */
+            color: #dfe6e9;
         }
 
-        /* Контейнер для логотипа */
         .logo-container {
-        width: 100%; /* Ширина контейнера 100% */
-        text-align: center; /* Центрируем текст внутри контейнера */
-        display: flex; /* Используем Flexbox для центрирования */
-        justify-content: center; /* Центрируем по горизонтали */
-        align-items: center; /* Центрируем по вертикали */
-        height: 100px; /* Высота контейнера */
-        margin-bottom: -20px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            margin-bottom: -20px;
         }
 
-    /* Логотип */
         .logo {
-        width: 100%; /* Логотип будет занимать 50% от ширины контейнера */
-        max-width: 350px; /* Максимальная ширина логотипа */
-        height: auto; /* Сохраняем пропорции */
-        opacity: 1;
-        display: block;
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            opacity: 1;
+            display: block;
         }
 
-        /* Контейнер с контентом */
         .container {
             max-width: 800px;
-            margin: auto; /* Центрируем контейнер с контентом */
-            background-color: #34495e; /* Темный фон контейнера */
+            margin: auto;
+            background-color: #34495e;
             border-radius: 12px;
             padding: 5px 15px;
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
             position: relative;
-            margin-top: -10px; /* Убираем лишнее пространство сверху */
+            margin-top: -10px;
         }
 
         .title {
             font-size: 28px;
             font-weight: bold;
-            margin-top: 20px; /* Отступ сверху */
-            color: #ecf0f1; /* Светлый текст для заголовка */
+            margin-top: 20px;
+            color: #ecf0f1;
             text-align: center;
-            background-color: #16a085; /* Яркий зеленый фон */
+            background-color: #16a085;
             padding: 10px;
             border-radius: 12px;
             margin-bottom: 30px;
@@ -62,7 +59,7 @@
 
         .divider {
             margin: 15px 0;
-            border-top: 3px solid #1abc9c; /* Яркая линия между статусами */
+            border-top: 3px solid #1abc9c;
         }
 
         .section {
@@ -72,7 +69,7 @@
         .section-title {
             font-size: 22px;
             font-weight: bold;
-            color: #1abc9c; /* Яркий зеленый цвет */
+            color: #1abc9c;
             margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -97,6 +94,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            cursor: pointer;
         }
 
         .photo img {
@@ -105,49 +103,78 @@
             object-fit: cover;
         }
 
-            /* Адаптивность для мобильных устройств (меньше 768px) */
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Адаптивность */
         @media (max-width: 768px) {
-    .logo {
-        width: 50%; /* Логотип будет занимать 50% ширины экрана */
-        max-width: 200px; /* Максимальная ширина логотипа */
-    }
+            .logo {
+                width: 50%;
+                max-width: 200px;
+            }
 
-    .title {
-        font-size: 24px; /* Уменьшаем размер заголовка на мобильных */
-        margin-top: 5px; /* Отступ сверху */
+            .title {
+                font-size: 24px;
+            }
 
-    }
+            .container {
+                padding: 20px;
+            }
+        }
 
-    .container {
-        padding: 20px; /* Уменьшаем отступы в контейнере для мобильных */
-    }
-    }
+        @media (max-width: 480px) {
+            .logo {
+                width: 60%;
+                max-width: 180px;
+            }
 
-/* Адаптивность для экранов меньшего размера (например, мобильные телефоны в портретной ориентации) */
-    @media (max-width: 480px) {
-    .logo {
-        width: 60%; /* Логотип будет занимать 60% от ширины экрана */
-        max-width: 180px; /* Ограничиваем максимальную ширину логотипа */
-    }
+            .title {
+                font-size: 20px;
+            }
 
-    .title {
-        font-size: 20px; /* Еще меньший размер заголовка */
-        margin-top: 5px; /* Отступ сверху */
-
-    }
-
-    .container {
-        padding: 15px; /* Уменьшаем отступы еще больше */
-    }
-    }
-
-
+            .container {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="logo-container">
-        <!-- Логотип теперь по центру в контейнере -->
         <img src="{% static 'logos/Frame 9.png' %}" alt="Lucent Car Logo" class="logo">
     </div>
 
@@ -184,25 +211,40 @@
                     {% if transition.comment %}
                         <strong>Comment:</strong> {{ transition.comment }}<br>
                     {% endif %}
+                    {% if transition.photo %}
+                        <div class="photo" onclick="openModal('{{ transition.photo.url }}')">
+                            <img src="{{ transition.photo.url }}" alt="Status Photo">
+                        </div>
+                    {% endif %}
                     <div class="divider"></div>
                 {% endfor %}
             </div>
         </div>
-
-        <!-- Photos -->
-        <div class="section">
-            <div class="section-title">Photos</div>
-            <div class="photos">
-                {% for photo in job.transitions.all %}
-                    {% if photo.photo %}
-                        <div class="photo">
-                            <img src="{{ photo.photo.url }}" alt="Status Photo">
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
     </div>
+
+    <!-- Модальное окно для просмотра фотографии на весь экран -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <!-- JavaScript для обработки модального окна -->
+    <script>
+        // Функция для открытия модального окна с изображением
+        function openModal(imageUrl) {
+            var modal = document.getElementById('imageModal');
+            var modalImage = document.getElementById('modalImage');
+
+            modal.style.display = "block"; // Показываем модальное окно
+            modalImage.src = imageUrl; // Устанавливаем источник изображения
+        }
+
+        // Функция для закрытия модального окна
+        function closeModal() {
+            var modal = document.getElementById('imageModal');
+            modal.style.display = "none"; // Закрываем модальное окно
+        }
+    </script>
 </body>
 
 </html>
