@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Панель управления</title>
 
-    <!-- Custom fonts and styles -->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
@@ -138,18 +137,16 @@
 
             <div id="content">
 
-                <!-- Updated top section with larger logo and centered title -->
                 <div class="logo-container">
-                    <img src="{% static 'logos/Frame 9.png' %}" alt="Логотип Lucent Car" class="logo">
+                    <img src="{% static 'logos/Frame 9.png' %}" alt="Lucent Car Logo" class="logo">
                     <h1 class="topbar-title">Dashboard</h1>
                 </div>
 
-                <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <form method="get" class="filter-form">
                         <label for="period">Фильтр по времени:</label>
                         <select name="period" id="period" onchange="this.form.submit()">
-                            <option value="all" {% if request.GET.period == "all" %}selected{% endif %}>Все время</option>
+                            <option value="" {% if not request.GET.period %}selected{% endif %}>Все время</option>
                             <option value="today" {% if request.GET.period == "today" %}selected{% endif %}>Сегодня</option>
                             <option value="last_week" {% if request.GET.period == "last_week" %}selected{% endif %}>Прошлая неделя</option>
                             <option value="last_month" {% if request.GET.period == "last_month" %}selected{% endif %}>Прошлый месяц</option>
@@ -158,14 +155,13 @@
 
                         <label for="job_status">Фильтр по статусу работы:</label>
                         <select name="job_status" id="job_status" onchange="this.form.submit()">
-                            <option value="all" {% if request.GET.job_status == "all" %}selected{% endif %}>Все статусы</option>
+                            <option value="" {% if not request.GET.job_status %}selected{% endif %}>Все статусы</option>
                             <option value="ожидает_предоплаты" {% if request.GET.job_status == "ожидает_предоплаты" %}selected{% endif %}>Ожидает Предоплаты</option>
                             <option value="в_процессе" {% if request.GET.job_status == "в_процессе" %}selected{% endif %}>В Процессе</option>
                             <option value="завершено" {% if request.GET.job_status == "завершено" %}selected{% endif %}>Завершено</option>
                         </select>
                     </form>
 
-                    <!-- Data Table -->
                     <div class="card shadow mb-4">
                         <div class="table-responsive">
                             <table class="table">
@@ -181,18 +177,12 @@
                                 </thead>
                                 <tbody>
                                 {% for job in jobs %}
-                                    {% if request.GET.job_status == "all" or job.job_status == request.GET.job_status %}
                                     <tr>
                                         <td>{{ job.car }}</td>
                                         <td>{{ job.client.first_name }} {{ job.client.last_name }}</td>
                                         <td>{{ job.service }}</td>
                                         <td>{{ job.job_status }}</td>
                                         <td>{{ job.created_at }}</td>
-                                    </tr>
-                                    {% endif %}
-                                {% empty %}
-                                    <tr>
-                                        <td colspan="5" class="text-center no-data">Данные отсутствуют</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -201,22 +191,9 @@
                     </div>
 
                 </div>
-                <!-- /.container-fluid -->
-
             </div>
-            <!-- End of Main Content -->
-
         </div>
-        <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
-
 </body>
 
 </html>

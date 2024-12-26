@@ -37,6 +37,11 @@ class UserServiceTrackerView(DetailView):
         return context
 
 
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
+from django.utils.timezone import now
+from django.db.models import Q
+
 
 class DashboardView(ListView):
     model = Job
@@ -45,18 +50,25 @@ class DashboardView(ListView):
 
     def get_queryset(self):
         period = self.request.GET.get('period', 'all')
+        job_status = self.request.GET.get('job_status', 'all')
 
         queryset = Job.objects.select_related('client', 'car', 'service')
-        # Фильтруем данные
+
         if period == 'today':
             return queryset.filter(created_at__date=now().date())
         elif period == 'last_week':
             start_date = now().date() - timedelta(days=7)
             return queryset.filter(created_at__date__gte=start_date)
         elif period == 'last_month':
-            start_date = now().date() - timedelta(days=30)
-            return queryset.filter(created_at__date__gte=start_date)
+            first_day_last_month = now().replace(day=1) - timedelta(days=1)
+            first_day_last_month = first_day_last_month.replace(day=1)  # первый день месяца
+            return queryset.filter(created_at__date__gte=first_day_last_month)
         elif period == 'last_year':
-            start_date = now() - relativedelta(years=1)
-            return queryset.filter(created_at__date__gte=start_date)
+            first_day_last_year = now().replace(month=1, day=1) - timedelta(days=1)
+            first_day_last_year = first_day_last_year.replace(year=first_day_last_year.year - 1)
+            return queryset.filter(created_at__date__gte=first_day_last_year)
+
+        if job_status:
+            queryset = queryset.filter(job_status=job_status)
+
         return queryset
