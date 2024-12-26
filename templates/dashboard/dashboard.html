@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Панель управления</title>
 
     <!-- Custom fonts and styles -->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -140,25 +140,25 @@
 
                 <!-- Updated top section with larger logo and centered title -->
                 <div class="logo-container">
-                    <img src="{% static 'logos/Frame 9.png' %}" alt="Lucent Car Logo" class="logo">
+                    <img src="{% static 'logos/Frame 9.png' %}" alt="Логотип Lucent Car" class="logo">
                     <h1 class="topbar-title">Dashboard</h1>
                 </div>
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <form method="get" class="filter-form">
-                        <label for="period">Filter by time:</label>
+                        <label for="period">Фильтр по времени:</label>
                         <select name="period" id="period" onchange="this.form.submit()">
-                            <option value="all" {% if request.GET.period == "all" %}selected{% endif %}>All time</option>
-                            <option value="today" {% if request.GET.period == "today" %}selected{% endif %}>Today</option>
-                            <option value="last_week" {% if request.GET.period == "last_week" %}selected{% endif %}>Last week</option>
-                            <option value="last_month" {% if request.GET.period == "last_month" %}selected{% endif %}>Last month</option>
-                            <option value="last_year" {% if request.GET.period == "last_year" %}selected{% endif %}>Last year</option>
+                            <option value="all" {% if request.GET.period == "all" %}selected{% endif %}>Все время</option>
+                            <option value="today" {% if request.GET.period == "today" %}selected{% endif %}>Сегодня</option>
+                            <option value="last_week" {% if request.GET.period == "last_week" %}selected{% endif %}>Прошлая неделя</option>
+                            <option value="last_month" {% if request.GET.period == "last_month" %}selected{% endif %}>Прошлый месяц</option>
+                            <option value="last_year" {% if request.GET.period == "last_year" %}selected{% endif %}>Прошлый год</option>
                         </select>
 
-                        <label for="job_status">Filter by job status:</label>
+                        <label for="job_status">Фильтр по статусу работы:</label>
                         <select name="job_status" id="job_status" onchange="this.form.submit()">
-                            <option value="all" {% if request.GET.job_status == "all" %}selected{% endif %}>All statuses</option>
+                            <option value="all" {% if request.GET.job_status == "all" %}selected{% endif %}>Все статусы</option>
                             <option value="ожидает_предоплаты" {% if request.GET.job_status == "ожидает_предоплаты" %}selected{% endif %}>Ожидает Предоплаты</option>
                             <option value="в_процессе" {% if request.GET.job_status == "в_процессе" %}selected{% endif %}>В Процессе</option>
                             <option value="завершено" {% if request.GET.job_status == "завершено" %}selected{% endif %}>Завершено</option>
@@ -169,14 +169,14 @@
                     <div class="card shadow mb-4">
                         <div class="table-responsive">
                             <table class="table">
-                                <caption class="table-caption">Jobs Overview</caption>
+                                <caption class="table-caption">Обзор работ</caption>
                                 <thead>
                                 <tr>
-                                    <th>Car</th>
-                                    <th>Client</th>
-                                    <th>Service</th>
-                                    <th>Job Status</th>
-                                    <th>Created At</th>
+                                    <th>Автомобиль</th>
+                                    <th>Клиент</th>
+                                    <th>Услуга</th>
+                                    <th>Статус работы</th>
+                                    <th>Дата создания</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -192,7 +192,7 @@
                                     {% endif %}
                                 {% empty %}
                                     <tr>
-                                        <td colspan="5" class="text-center no-data">No data available</td>
+                                        <td colspan="5" class="text-center no-data">Данные отсутствуют</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Details</title>
+    <title>Детали Работы</title>
 
     <style>
         body {
@@ -175,45 +175,45 @@
 
 <body>
     <div class="logo-container">
-        <img src="{% static 'logos/Frame 9.png' %}" alt="Lucent Car Logo" class="logo">
+        <img src="{% static 'logos/Frame 9.png' %}" alt="Логотип Lucent Car" class="logo">
     </div>
 
     <div class="container">
-        <div class="title">Job Details</div>
+        <div class="title">Детали Работы</div>
 
-        <!-- Car Information -->
+        <!-- Информация об автомобиле -->
         <div class="section">
-            <div class="section-title">Car Information</div>
+            <div class="section-title">Информация об автомобиле</div>
             <div class="section-content">
-                <strong>Car:</strong> {{ job.car }}<br>
-                <strong>Client:</strong> {{ job.client.first_name }} {{ job.client.last_name }}
+                <strong>Автомобиль:</strong> {{ job.car }}<br>
+                <strong>Клиент:</strong> {{ job.client.first_name }} {{ job.client.last_name }}
             </div>
         </div>
 
-        <!-- Selected Services -->
+        <!-- Выбранные услуги -->
         <div class="section">
-            <div class="section-title">Selected Services</div>
+            <div class="section-title">Выбранные услуги</div>
             <div class="section-content">
-                <strong>Service:</strong> {{ service.name }}<br>
-                <strong>Price:</strong> ${{ service.price }}<br>
+                <strong>Услуга:</strong> {{ service.name }}<br>
+                <strong>Цена:</strong> ${{ service.price }}<br>
             </div>
         </div>
 
-        <!-- Status History -->
+        <!-- История статусов -->
         <div class="section">
-            <div class="section-title">Status History</div>
+            <div class="section-title">История статусов</div>
             <div class="section-content">
                 {% for transition in job.transitions.all %}
                     {% if transition.status %}
-                        <strong>Status:</strong> {{ transition.status.name_of_the_status }}<br>
+                        <strong>Статус:</strong> {{ transition.status.name_of_the_status }}<br>
                     {% endif %}
-                    <strong>Changed At:</strong> {{ transition.changed_at }}<br>
+                    <strong>Изменено:</strong> {{ transition.changed_at }}<br>
                     {% if transition.comment %}
-                        <strong>Comment:</strong> {{ transition.comment }}<br>
+                        <strong>Комментарий:</strong> {{ transition.comment }}<br>
                     {% endif %}
                     {% if transition.photo %}
                         <div class="photo" onclick="openModal('{{ transition.photo.url }}')">
-                            <img src="{{ transition.photo.url }}" alt="Status Photo">
+                            <img src="{{ transition.photo.url }}" alt="Фотография статуса">
                         </div>
                     {% endif %}
                     <div class="divider"></div>
