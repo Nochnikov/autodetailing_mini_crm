@@ -1,4 +1,3 @@
-from django.db.models import Prefetch
 from django.views.generic import DetailView, ListView
 from datetime import timedelta
 from django.utils.timezone import now
@@ -37,37 +36,32 @@ class UserServiceTrackerView(DetailView):
         return context
 
 
-from datetime import timedelta
-from dateutil.relativedelta import relativedelta
-from django.utils.timezone import now
-from django.db.models import Q
-
-
 class DashboardView(ListView):
     model = Job
     template_name = r'dashboard/dashboard.html'
     context_object_name = 'jobs'
 
     def get_queryset(self):
-        period = self.request.GET.get('period', 'all')
-        job_status = self.request.GET.get('job_status', 'all')
+        period = self.request.GET.get('period', '')
+        job_status = self.request.GET.get('job_status', '')
 
         queryset = Job.objects.select_related('client', 'car', 'service')
 
+        # Фильтрация по времени
         if period == 'today':
-            return queryset.filter(created_at__date=now().date())
+            queryset = queryset.filter(created_at__date=now().date())
         elif period == 'last_week':
             start_date = now().date() - timedelta(days=7)
-            return queryset.filter(created_at__date__gte=start_date)
+            queryset = queryset.filter(created_at__date__gte=start_date)
         elif period == 'last_month':
-            first_day_last_month = now().replace(day=1) - timedelta(days=1)
-            first_day_last_month = first_day_last_month.replace(day=1)  # первый день месяца
-            return queryset.filter(created_at__date__gte=first_day_last_month)
+            first_day_last_month = now() - relativedelta(months=1)
+            first_day_last_month = first_day_last_month.replace(day=1)
+            queryset = queryset.filter(created_at__date__gte=first_day_last_month)
         elif period == 'last_year':
-            first_day_last_year = now().replace(month=1, day=1) - timedelta(days=1)
-            first_day_last_year = first_day_last_year.replace(year=first_day_last_year.year - 1)
-            return queryset.filter(created_at__date__gte=first_day_last_year)
+            first_day_last_year = now().replace(month=1, day=1) - relativedelta(years=1)
+            queryset = queryset.filter(created_at__date__gte=first_day_last_year)
 
+        # Фильтрация по статусу (проверяем, задан ли статус)
         if job_status:
             queryset = queryset.filter(job_status=job_status)
 
