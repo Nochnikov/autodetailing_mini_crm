@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    "constance",
     'detailing',
     'authorization',
     'django_extensions',
@@ -79,6 +79,25 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+CONSTANCE_CONFIG = {
+    'MESSAGE': ('Уважаемый клиент, ваш статус обновлен: ', 'message to client')
+}
+
+CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',  # Убедитесь, что адрес Redis правильный
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+CONSTANCE_REDIS_CONNECTION = "redis://127.0.0.1:6379/0"  # Убедитесь, что используете правильный порт
+
 
 load_dotenv()
 

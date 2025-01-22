@@ -22,13 +22,25 @@ class ServiceTransitionInline(admin.TabularInline):
             kwargs['queryset'] = Status.objects.filter(service=job.service)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+class ServiceStatusInline(admin.TabularInline):
+    model = Status
+    extra = 0
+    fields = ['name_of_the_status', 'description_of_the_status']
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+        if obj:
+            formset.form.base_fields['name_of_the_status'].queryset = Status.objects.filter(service=obj)
+        return formset
+
 
 class JobAdmin(admin.ModelAdmin):
     list_display = ('id', 'client', 'car', 'service', 'job_status', 'created_at')
     inlines = [ServiceTransitionInline]  # Инлайн для переходов статуса
     search_fields = ('id', 'client__name', 'car__license_plate')
 
-
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description', 'price']
+    inlines = [ServiceStatusInline]
 
 
 admin.site.register(Job, JobAdmin)
@@ -36,7 +48,8 @@ admin.site.register(ServiceTransition)
 admin.site.register(Car)
 admin.site.register(Status)
 admin.site.register(Client)
-admin.site.register(Service)
+admin.site.register(Service, ServiceAdmin)
+# admin.site.register(Service)
 
 admin.site.site_header = 'Lucent Car'
 admin.site.site_title = 'Lucent Car Admin'
