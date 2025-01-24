@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'detailing',
     'authorization',
     'django_extensions',
+    'rangefilter',
 ]
 
 MIDDLEWARE = [
@@ -81,7 +82,13 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 CONSTANCE_CONFIG = {
-    'MESSAGE': ('Уважаемый клиент, ваш статус обновлен: ', 'message to client')
+    'STATUS_MESSAGE_TO_CLIENT': ('Уважаемый клиент, ваш статус обновлен: ',
+                                 'сообщение клиенту, посвященное изменению статуса'),
+    "FIRST_PUSH_MESSAGE_TO_CLIENT": ("Привет, спасибо что выбрали нас!",
+                                     "сообщение клиенту, для первого оповещения о регистрации работы"),
+
+    'GREEN_API_INSTANCE_ID': ('__YOUR_ID__', 'id from your instance'),
+    'GREEN_API_TOKEN': ('__YOUR_TOKEN__', 'TOKEN from your account'),
 }
 
 CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
@@ -154,6 +161,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # Default primary key field type
