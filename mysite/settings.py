@@ -96,7 +96,7 @@ CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',  # Убедитесь, что адрес Redis правильный
+        'LOCATION': 'redis://redis:6379/0',  # Убедитесь, что адрес Redis правильный
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
