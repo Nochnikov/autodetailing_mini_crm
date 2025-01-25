@@ -1,10 +1,16 @@
 import requests
 from constance import config
+import logging
+
 
 BASE_URL = f'https://api.green-api.com/waInstance{config.GREEN_API_INSTANCE_ID}/SendMessage/{config.GREEN_API_TOKEN}'
 
-
-
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler()
+    ])
 
 def send_whatsapp_message(phone_number, message):
     if "+" in phone_number:
@@ -17,12 +23,15 @@ def send_whatsapp_message(phone_number, message):
         "message": message
     }
 
-    response = requests.post(BASE_URL, json=data)
+    headers = {
+        'Content-Type': 'application/json'
+    }
 
-    print(phone_number)
+    response = requests.post(BASE_URL, json=data, headers=headers)
 
     if response.status_code == 200:
-        print("Сообщение успешно отправлено", phone_number, message)
+
+        logging.info("Сообщение успешно отправлено")
     else:
-        print(f"Ошибка отправки: {response.status_code}, {response.text}")
+        logging.info(f"Ошибка отправки: {response.status_code}, {response.text}")
 
