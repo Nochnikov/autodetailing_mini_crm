@@ -6,10 +6,9 @@ from .models import Job, ServiceTransition, Status, Service, WhatsAppNewsletter
 from rangefilter.filters import DateRangeFilter
 from .inlines import ServiceTransitionInline, ServiceStatusInline
 
-
 class JobAdmin(admin.ModelAdmin):
     list_display = ('car', 'service', 'job_status', 'created_at', 'job_started', 'client',)
-    inlines = [ServiceTransitionInline]  # Инлайн для переходов статуса
+    inlines = [ServiceTransitionInline]
     search_fields = ('id', 'client__first_name', "client__last_name", "job_status", 'car__car_number')
     list_filter = [
         ("created_at", DateRangeFilter),

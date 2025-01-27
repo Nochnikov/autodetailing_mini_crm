@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import ServiceTransition, Status
 
 
@@ -10,6 +11,7 @@ class ServiceTransitionInline(admin.TabularInline):
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
+        formset.form.base_fields['status'].widget.can_add_related = False
         if obj:
             formset.form.base_fields['status'].queryset = Status.objects.filter(service=obj.service)
         return formset
@@ -20,10 +22,12 @@ class ServiceTransitionInline(admin.TabularInline):
             kwargs['queryset'] = Status.objects.filter(service=job.service)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+
 class ServiceStatusInline(admin.TabularInline):
     model = Status
     extra = 0
     fields = ['name_of_the_status', 'description_of_the_status']
+
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
         if obj:

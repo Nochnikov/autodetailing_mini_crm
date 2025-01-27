@@ -96,16 +96,17 @@ CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        # 'LOCATION': 'redis://redis:6379/0',  # Убедитесь, что адрес Redis правильный
-        'LOCATION': 'redis://127.0.0.1:6379/0',  # Убедитесь, что адрес Redis правильный
+        'LOCATION': 'redis://redis:6379/0',  # Убедитесь, что адрес Redis правильный
+        # 'LOCATION': 'redis://127.0.0.1:6379/0',  # Убедитесь, что адрес Redis правильный
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     }
 }
 
-CONSTANCE_REDIS_CONNECTION = "redis://127.0.0.1:6379/0"  # Убедитесь, что используете правильный порт
-# CONSTANCE_REDIS_CONNECTION = "redis://redis:6379/0"  # Убедитесь, что используете правильный порт
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+# CONSTANCE_REDIS_CONNECTION = "redis://127.0.0.1:6379/0"  # Убедитесь, что используете правильный порт
+CONSTANCE_REDIS_CONNECTION = "redis://redis:6379/0"  # Убедитесь, что используете правильный порт
 
 
 load_dotenv()
@@ -158,7 +159,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
