@@ -42,13 +42,31 @@
             margin: 0;
         }
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
+        .chart-container {
             margin: 20px auto;
-            background-color: #2c3e50;
-            padding: 20px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            background-color: #34495e;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 850px;
+            height: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ecf0f1;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 300px !important;
         }
 
         .table-responsive {
@@ -60,21 +78,20 @@
             border-collapse: collapse;
             margin-top: 10px;
             font-size: 16px;
+            table-layout: fixed; /* Устанавливаем фиксированную ширину */
+        }
+
+        .table th, .table td {
+            padding: 15px;
+            border-bottom: 1px solid #444;
+            text-align: left;
+            font-size: 14px;
+            word-wrap: break-word; /* Перенос слов для длинных текстов */
         }
 
         .table th {
             background-color: #34495e;
             color: #ffffff;
-            text-align: left;
-            padding: 15px;
-            border-bottom: 1px solid #2c3e50;
-        }
-
-        .table td {
-            padding: 15px;
-            border-bottom: 1px solid #444;
-            text-align: left;
-            font-size: 14px;
         }
 
         .table tr:nth-child(even) {
@@ -127,21 +144,28 @@
                 width: 100%;
             }
         }
+        a {
+    color: #ffffff; /* Белый цвет ссылок по умолчанию */
+    text-decoration: none;
+    }
+
+    a:hover {
+    color: #1abc9c; /* Зелёный цвет при наведении */
+    text-decoration: underline;
+    }
+
     </style>
 </head>
 
 <body id="page-top">
     <div id="wrapper">
+        <div class="logo-container">
+            <img src="{% static 'logos/Frame 9.png' %}" alt="Lucent Car Logo" class="logo">
+            <h1 class="topbar-title">Дэшборд</h1>
+        </div>
 
         <div id="content-wrapper" class="d-flex flex-column">
-
             <div id="content">
-
-                <div class="logo-container">
-                    <img src="{% static 'logos/Frame 9.png' %}" alt="Lucent Car Logo" class="logo">
-                    <h1 class="topbar-title">Панель управления</h1>
-                </div>
-
                 <div class="container-fluid">
                     <form method="get" class="filter-form">
                         <label for="period">Фильтр по времени:</label>
@@ -156,44 +180,139 @@
                         <label for="job_status">Фильтр по статусу работы:</label>
                         <select name="job_status" id="job_status" onchange="this.form.submit()">
                             <option value="" {% if not request.GET.job_status %}selected{% endif %}>Все статусы</option>
-                            <option value="ожидает_предоплаты" {% if request.GET.job_status == "ожидает_предоплаты" %}selected{% endif %}>Ожидает Предоплаты</option>
-                            <option value="в_процессе" {% if request.GET.job_status == "в_процессе" %}selected{% endif %}>В Процессе</option>
+                            <option value="в_записи" {% if request.GET.job_status == "в_записи" %}selected{% endif %}>В записи</option>
+                            <option value="в_процессе" {% if request.GET.job_status == "в_процессе" %}selected{% endif %}>В процессе</option>
                             <option value="завершено" {% if request.GET.job_status == "завершено" %}selected{% endif %}>Завершено</option>
                         </select>
                     </form>
 
-                    <div class="card shadow mb-4">
+                    {% for entry in weekly_data %}
+                    <div class="weekly-group">
+                        <h3>{{ entry.week }}</h3>
                         <div class="table-responsive">
                             <table class="table">
-                                <caption class="table-caption">Обзор работ</caption>
                                 <thead>
-                                <tr>
-                                    <th>Автомобиль</th>
-                                    <th>Клиент</th>
-                                    <th>Услуга</th>
-                                    <th>Статус работы</th>
-                                    <th>Дата создания</th>
-                                </tr>
+                                    <tr>
+                                        <th>Автомобиль</th>
+                                        <th>Клиент</th>
+                                        <th>Услуга</th>
+                                        <th>Статус работы</th>
+                                        <th>Дата создания</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                {% for job in jobs %}
-                                    <tr>
-                                        <td>{{ job.car }}</td>
-                                        <td>{{ job.client.first_name }} {{ job.client.last_name }}</td>
-                                        <td>{{ job.service }}</td>
-                                        <td>{{ job.job_status }}</td>
-                                        <td>{{ job.created_at }}</td>
-                                    </tr>
-                                {% endfor %}
+                                    {% for job in jobs %}
+                                        {% if job.created_at|date:"Y-m-d" >= entry.week_start and job.created_at|date:"Y-m-d" <= entry.week_end %}
+                                            <tr>
+                                                <td>
+                                                    <a href="/admin/detailing/job/{{ job.id }}/" target="_blank">{{ job.car }}</a>
+                                                </td>
+                                                <td>
+                                                    {{ job.client.first_name }} {{ job.client.last_name }}
+                                                </td>
+                                                <td>
+                                                    {{ job.service }}
+                                                </td>
+                                                <td>{{ job.job_status }}</td>
+                                                <td>
+                                                    {{ job.created_at }}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    {% endfor %}
 
+                    <!-- График доходов -->
+                    <div class="chart-container">
+                        <div class="chart-title">График доходов</div>
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+
+                    <!-- График количества работ -->
+                    <div class="chart-container">
+                        <div class="chart-title">График количества работ</div>
+                        <canvas id="jobChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.2/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon"></script>
+    <script>
+        const revenueData = JSON.parse('{{ revenue_chart_data|escapejs }}');
+        const jobData = JSON.parse('{{ job_chart_data|escapejs }}');
+
+        // График доходов
+        new Chart(document.getElementById('revenueChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: revenueData.map(data => data.date),
+                datasets: [{
+                    label: 'Доходы',
+                    data: revenueData.map(data => data.total_revenue || 0),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderWidth: 1,
+                    fill: false,
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: { unit: 'month' },
+                        ticks: { color: 'white' },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: 'white' },
+                    },
+                },
+            },
+        });
+
+        // График количества работ
+        new Chart(document.getElementById('jobChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: jobData.map(data => data.date),
+                datasets: [{
+                    label: 'Количество работ',
+                    data: jobData.map(data => data.job_count || 0),
+                    backgroundColor: 'rgba(153, 102, 255, 0.5)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1,
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: { unit: 'month' },
+                        ticks: { color: 'white' },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: 'white' },
+                    },
+                },
+            },
+        });
+    </script>
 </body>
 
 </html>
+
+
+

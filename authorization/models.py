@@ -8,13 +8,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     GENDER_CHOICES = ((MALE, 'male'),
                       (FEMALE, 'female'))
 
-    username = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(unique=False)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    gender = models.IntegerField(choices=GENDER_CHOICES, default=MALE)
+    username = models.CharField(max_length=100, unique=True, verbose_name="Имя пользовтеля")
+    email = models.EmailField(unique=False, verbose_name="Электронная почта")
+    is_staff = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=True)
+    first_name = models.CharField(max_length=100, verbose_name="Имя")
+    last_name = models.CharField(max_length=100, verbose_name="Фамилия")
+    gender = models.IntegerField(choices=GENDER_CHOICES, default=MALE, verbose_name="Пол")
 
 
     objects = UserManager()
@@ -30,4 +30,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return f'{self.username}:{self.password}, {self.is_superuser}'
 
+
+    class Meta:
+        verbose_name = 'Сотрудники'
+        verbose_name_plural = 'Сотрудники'
 

@@ -40,10 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    "constance",
     'detailing',
     'authorization',
     'django_extensions',
+    'rangefilter',
 ]
 
 MIDDLEWARE = [
@@ -79,6 +80,34 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+CONSTANCE_CONFIG = {
+    'STATUS_MESSAGE_TO_CLIENT': ('Уважаемый клиент, ваш статус обновлен: ',
+                                 'сообщение клиенту, посвященное изменению статуса'),
+    "FIRST_PUSH_MESSAGE_TO_CLIENT": ("Привет, спасибо что выбрали нас!",
+                                     "сообщение клиенту, для первого оповещения о регистрации работы"),
+
+    'GREEN_API_INSTANCE_ID': ('__YOUR_ID__', 'id from your instance'),
+    'GREEN_API_TOKEN': ('__YOUR_TOKEN__', 'TOKEN from your account'),
+}
+
+CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379/0',  # Убедитесь, что адрес Redis правильный
+        # 'LOCATION': 'redis://127.0.0.1:6379/0',  # Убедитесь, что адрес Redis правильный
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+# CONSTANCE_REDIS_CONNECTION = "redis://127.0.0.1:6379/0"  # Убедитесь, что используете правильный порт
+CONSTANCE_REDIS_CONNECTION = "redis://redis:6379/0"  # Убедитесь, что используете правильный порт
+
 
 load_dotenv()
 
@@ -130,11 +159,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # Default primary key field type
