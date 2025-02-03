@@ -49,9 +49,9 @@ class Service(models.Model):
 class Status(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name_of_the_status = models.CharField(max_length=20, verbose_name="Статус")
-    description_of_the_status = models.TextField(null=True, blank=True, verbose_name="Описание")
+    # description_of_the_status = models.TextField(null=True, blank=True, verbose_name="Описание")
 
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="Услуга")
+    # service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="Услуга")
 
     def __str__(self):
         return f'{self.name_of_the_status}'
@@ -80,7 +80,8 @@ class Job(models.Model):
         super().save(*args, **kwargs)
 
         if is_new:
-            initial_status = Status.objects.filter(service=self.service).first()
+            # initial_status = Status.objects.filter(service=self.service).first()
+            initial_status = Status.objects.all().first()
 
             if not initial_status:
                 raise ValueError(f"No initial status found for service '{self.service.name}'. Please create a status.")
@@ -98,6 +99,7 @@ class ServiceTransition(models.Model):
     status = models.ForeignKey('Status', on_delete=models.CASCADE, related_name='transitions', verbose_name="Статус")
     photo = models.ImageField(upload_to='transitions_photos/', blank=True, null=True, verbose_name="Фотография")
     changed_at = models.DateTimeField(default=timezone.now, verbose_name="Изменено в")
+    comment = models.TextField(verbose_name="Комментарии")
 
     def save(self, *args, **kwargs):
         if self.pk:
@@ -114,6 +116,7 @@ class ServiceTransition(models.Model):
                 return
 
         super(ServiceTransition, self).save(*args, **kwargs)
+
     def __str__(self):
         status_name = self.status.name_of_the_status if self.status else "No Status"
         return f"{self.job} - {status_name} ({self.changed_at})"

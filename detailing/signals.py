@@ -19,7 +19,7 @@ def notify_status_change(sender, instance, **kwargs):
     if instance.status:
         new_status = instance.status.name_of_the_status
         message = (config.STATUS_MESSAGE_TO_CLIENT + "\n\n" + new_status + "\n\nОписание:" +
-                   "\n\n" + f"{instance.status.description_of_the_status}" + "\n\n\n"
+                   "\n\n" + f"{instance.comment}" + "\n\n\n"
                    # + f"http://127.0.0.1:8000/user_side/service/{instance.job.id}/")
                    + f"http://194.32.141.192:8000/user_side/service/{instance.job.id}/")
         send_whatsapp_message(client_phone, message)

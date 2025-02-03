@@ -28,7 +28,6 @@ def send_whatsapp_message(phone_number, message):
     }
 
     response = requests.post(BASE_URL, json=data, headers=headers)
-
     if response.status_code == 200:
 
         logging.info("Сообщение успешно отправлено")

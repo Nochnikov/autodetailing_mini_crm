@@ -4,7 +4,7 @@ from detailing.models import *
 from django.contrib import admin
 from .models import Job, ServiceTransition, Status, Service, WhatsAppNewsletter
 from rangefilter.filters import DateRangeFilter
-from .inlines import ServiceTransitionInline, ServiceStatusInline
+from .inlines import ServiceTransitionInline
 
 class JobAdmin(admin.ModelAdmin):
     list_display = ('car', 'service', 'job_status', 'created_at', 'job_started', 'client',)
@@ -20,7 +20,7 @@ class JobAdmin(admin.ModelAdmin):
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ['name', 'description', 'price']
-    inlines = [ServiceStatusInline]
+    # inlines = [ServiceStatusInline]
     search_fields = ("name", "price")
 
 
