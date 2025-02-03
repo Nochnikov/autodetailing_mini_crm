@@ -99,17 +99,20 @@ class ServiceTransition(models.Model):
     status = models.ForeignKey('Status', on_delete=models.CASCADE, related_name='transitions', verbose_name="Статус")
     photo = models.ImageField(upload_to='transitions_photos/', blank=True, null=True, verbose_name="Фотография")
     changed_at = models.DateTimeField(default=timezone.now, verbose_name="Изменено в")
-    comment = models.TextField(verbose_name="Комментарии")
+    comment = models.TextField(verbose_name="Комментарий")
 
     def save(self, *args, **kwargs):
         if self.pk:
             old_status = ServiceTransition.objects.get(id=self.pk).status
             new_status = self.status
+            old_comment = ServiceTransition.objects.get(id=self.pk).comment
+            new_comment = self.comment
 
             if old_status != new_status:
                 new_transition = ServiceTransition(
                     job=self.job,
                     status=new_status,
+                    comment=new_comment,
                     changed_at=timezone.now()
                 )
                 new_transition.save()
