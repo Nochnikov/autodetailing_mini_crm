@@ -1,7 +1,8 @@
 from django.db import models
 import uuid
 from django.utils import timezone
-
+from .utils import send_whatsapp_message
+from constance import config
 # Create your models here.
 
 class Client(models.Model):
@@ -49,9 +50,9 @@ class Service(models.Model):
 class Status(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name_of_the_status = models.CharField(max_length=20, verbose_name="Статус")
-    description_of_the_status = models.TextField(null=True, blank=True, verbose_name="Описание")
+    # description_of_the_status = models.TextField(null=True, blank=True, verbose_name="Описание")
 
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="Услуга")
+    # service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="Услуга")
 
     def __str__(self):
         return f'{self.name_of_the_status}'
@@ -80,10 +81,18 @@ class Job(models.Model):
         super().save(*args, **kwargs)
 
         if is_new:
-            initial_status = Status.objects.filter(service=self.service).first()
+            # initial_status = Status.objects.filter(service=self.service).first()
+            initial_status = Status.objects.all().first()
 
             if not initial_status:
                 raise ValueError(f"No initial status found for service '{self.service.name}'. Please create a status.")
+
+        if self.job_status == "завершено":
+            send_whatsapp_message(
+                phone_number=self.client.phone_number,
+                message=config.FINAL_MESSAGE_TO_CLIENT
+            )
+
 
     def __str__(self):
         return f"Job {self.id} - {self.service.name}"
@@ -98,22 +107,26 @@ class ServiceTransition(models.Model):
     status = models.ForeignKey('Status', on_delete=models.CASCADE, related_name='transitions', verbose_name="Статус")
     photo = models.ImageField(upload_to='transitions_photos/', blank=True, null=True, verbose_name="Фотография")
     changed_at = models.DateTimeField(default=timezone.now, verbose_name="Изменено в")
+    comment = models.TextField(verbose_name="Комментарий")
 
     def save(self, *args, **kwargs):
         if self.pk:
             old_status = ServiceTransition.objects.get(id=self.pk).status
             new_status = self.status
+            new_comment = self.comment
 
             if old_status != new_status:
                 new_transition = ServiceTransition(
                     job=self.job,
                     status=new_status,
+                    comment=new_comment,
                     changed_at=timezone.now()
                 )
                 new_transition.save()
                 return
 
         super(ServiceTransition, self).save(*args, **kwargs)
+
     def __str__(self):
         status_name = self.status.name_of_the_status if self.status else "No Status"
         return f"{self.job} - {status_name} ({self.changed_at})"

@@ -28,7 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         super(User, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.username}:{self.password}, {self.is_superuser}'
+        return f'{self.username}: {self.first_name} {self.last_name}'
 
 
     class Meta:
