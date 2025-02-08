@@ -101,6 +101,8 @@ CONSTANCE_CONFIG = {
 
     'GREEN_API_INSTANCE_ID': ('__YOUR_ID__', 'id from your instance'),
     'GREEN_API_TOKEN': ('__YOUR_TOKEN__', 'TOKEN from your account'),
+    'LINK': ('http://server.lucentcar.kz',
+             'ссылка на сайт')
 }
 
 CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
@@ -109,7 +111,6 @@ CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': 'redis://redis:6379/0',  # Убедитесь, что адрес Redis правильный
-        # 'LOCATION': 'redis://127.0.0.1:6379/0',  # Убедитесь, что адрес Redis правильный
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -117,11 +118,9 @@ CACHES = {
 }
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
-# CONSTANCE_REDIS_CONNECTION = "redis://127.0.0.1:6379/0"  # Убедитесь, что используете правильный порт
 CONSTANCE_REDIS_CONNECTION = "redis://redis:6379/0"  # Убедитесь, что используете правильный порт
 CONSTANCE_DATABASE_CACHE_BACKEND = None
 
-# CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
