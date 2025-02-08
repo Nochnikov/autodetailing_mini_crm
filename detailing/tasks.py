@@ -21,7 +21,7 @@ def checking_for_follow_up_task():
 
         if jobs:
             for job in jobs:
-                if job.created_at__date == now():
+                if job.created_at.date() == now():
                     continue
                 send_whatsapp_message(job.client.phone_number, config.FOLLOW_UP_MESSAGE)
     except Exception as e:
