@@ -32,12 +32,14 @@ ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'authorization.User'
 
 CORS_ALLOWED_ORIGINS = [
-    "https://server.lucentcar.kz/"
+    "https://server.lucentcar.kz"
 ]
+
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 SECURE_SSL_REDIRECT = False
-CSRF_TRUSTED_ORIGINS = ["https://server.lucentcar.kz/"]
+
+CSRF_TRUSTED_ORIGINS = ["https://server.lucentcar.kz"]
 
 # Application definition
 
