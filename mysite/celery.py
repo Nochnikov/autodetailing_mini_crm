@@ -11,8 +11,8 @@ celery_app.autodiscover_tasks()
 celery_app.conf.beat_schedule = {
     'checking_for_follow_up_task': {
         'task': 'detailing.tasks.checking_for_follow_up_task',
-        # 'schedule': crontab(hour='9', minute='0'),
-        'schedule': crontab(minute='*'),
+        'schedule': crontab(hour='9', minute='0'),
+        # 'schedule': crontab(minute='*'),
     },
 }
 
