@@ -51,7 +51,7 @@ def notify_status_change(sender, instance, created, **kwargs):
             message = config.STATUS_MESSAGE_TO_CLIENT.format(
                 new_status=new_status_text,
                 comment=instance.comment,
-                client_link=f"{config.LINK}/user_side/service/{instance.job.id}/"
+                client_link=f"{config.LINK}/u/{instance.job.id}/"
             )
 
             send_whatsapp_message(client_phone, message)

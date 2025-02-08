@@ -17,12 +17,13 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-
+from detailing.views import DashboardView
 from mysite import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user_side/', include('detailing.urls'))
+    path('u/', include('detailing.urls')),
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
 ]
 
 
