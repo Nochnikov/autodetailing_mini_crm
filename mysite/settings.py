@@ -30,6 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'authorization.User'
+CSRF_TRUSTED_ORIGINS = ["https://server.lucentcar.kz/"]
 
 # Application definition
 
