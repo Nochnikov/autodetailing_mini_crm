@@ -17,7 +17,7 @@ logging.basicConfig(
 @shared_task
 def checking_for_follow_up_task():
     try:
-        jobs = Job.objects.filter(job_started__date=now() + timedelta(days=1))
+        jobs = Job.objects.filter(job_started__date=now() + timedelta(days=1)).exclude(job_status="завершено")
 
         if jobs:
             for job in jobs:
