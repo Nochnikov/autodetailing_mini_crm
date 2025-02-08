@@ -13,11 +13,15 @@ WORKDIR /app
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
+
+
 # Копируем весь проект в рабочую директорию
 COPY . /app/
 
 # Устанавливаем порт, который будет использоваться
 EXPOSE 8000
 
-# Команда для запуска приложения
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+COPY ./entrypoint.dev.sh /entrypoint.dev.sh
+RUN chmod +x /entrypoint.dev.sh
+
+CMD ["/entrypoint.dev.sh"]

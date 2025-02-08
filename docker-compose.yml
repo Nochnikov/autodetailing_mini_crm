@@ -20,14 +20,40 @@ services:
       - "6379:6379"
     command: ["redis-server", "--appendonly", "yes"]
 
+  celery-worker:
+    container_name: celery-worker
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    environment:
+      DB_HOST: postgres
+    command: "celery -A mysite.celery worker --loglevel=INFO"
+
+  celery-beat:
+    container_name: celery-beat
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    depends_on:
+      - celery-worker
+      - web
+    environment:
+      DB_HOST: postgres
+    command: "celery -A mysite.celery beat --loglevel=INFO"
+
+
   web:
     build: .
     volumes:
       - .:/app
     ports:
       - "8000:8000"
-    env_file:
-      - mysite/.env
     depends_on:
       - autodet-postgres-db
       - redis

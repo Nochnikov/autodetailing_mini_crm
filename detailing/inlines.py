@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import ServiceTransition, Status
 
 
-class ServiceTransitionInline(admin.TabularInline):
+class ServiceTransitionInline(admin.StackedInline):
     model = ServiceTransition
     extra = 0
     fields = ('status', 'comment', 'photo', 'changed_at')

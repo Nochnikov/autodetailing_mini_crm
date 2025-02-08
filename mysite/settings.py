@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'authorization',
     'django_extensions',
     'rangefilter',
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'mysite.urls'
+
+TIME_ZONE = 'Almaty/Asia'
+USE_TZ = True
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers.DatabaseScheduler"
 
 TEMPLATES = [
     {
@@ -82,10 +88,16 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 CONSTANCE_CONFIG = {
-    'STATUS_MESSAGE_TO_CLIENT': ('Уважаемый клиент, ваш статус обновлен: ',
+    'STATUS_MESSAGE_TO_CLIENT': ("Уважаемый клиент, ваш статус обновлен: \n{new_status}\n\n"
+                                 "Комментарий: \n{comment}\n\n"
+                                 "Также вы можете посмотреть обновление на сайте: \n{client_link}",
                                  'сообщение клиенту, посвященное изменению статуса'),
     "FIRST_PUSH_MESSAGE_TO_CLIENT": ("Привет, спасибо что выбрали нас!",
                                      "сообщение клиенту, для первого оповещения о регистрации работы"),
+    "FOLLOW_UP_MESSAGE": ("Привет! Уведомляю вас о том, что работа по вашей заявке начнется завтра.",
+                          "сообщение за день до приема работы"),
+    "FINAL_MESSAGE_TO_CLIENT": ("Привет! Уведомляю вас о том, что работа по вашей заявке полостью завершена.",
+                                "сообщение после завершения работ"),
 
     'GREEN_API_INSTANCE_ID': ('__YOUR_ID__', 'id from your instance'),
     'GREEN_API_TOKEN': ('__YOUR_TOKEN__', 'TOKEN from your account'),
@@ -104,13 +116,17 @@ CACHES = {
     }
 }
 
-CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+# CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 # CONSTANCE_REDIS_CONNECTION = "redis://127.0.0.1:6379/0"  # Убедитесь, что используете правильный порт
 CONSTANCE_REDIS_CONNECTION = "redis://redis:6379/0"  # Убедитесь, что используете правильный порт
 CONSTANCE_DATABASE_CACHE_BACKEND = None
 
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
 
-load_dotenv()
+# load_dotenv()
 
 
 DATABASES = {

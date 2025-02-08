@@ -1,7 +1,8 @@
 from django.db import models
 import uuid
 from django.utils import timezone
-
+from .utils import send_whatsapp_message
+from constance import config
 # Create your models here.
 
 class Client(models.Model):
@@ -86,6 +87,13 @@ class Job(models.Model):
             if not initial_status:
                 raise ValueError(f"No initial status found for service '{self.service.name}'. Please create a status.")
 
+        if self.job_status == "завершено":
+            send_whatsapp_message(
+                phone_number=self.client.phone_number,
+                message=config.FINAL_MESSAGE_TO_CLIENT
+            )
+
+
     def __str__(self):
         return f"Job {self.id} - {self.service.name}"
 
@@ -105,7 +113,6 @@ class ServiceTransition(models.Model):
         if self.pk:
             old_status = ServiceTransition.objects.get(id=self.pk).status
             new_status = self.status
-            old_comment = ServiceTransition.objects.get(id=self.pk).comment
             new_comment = self.comment
 
             if old_status != new_status:
